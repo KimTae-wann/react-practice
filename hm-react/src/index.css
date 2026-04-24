@@ -1,0 +1,53 @@
+* {
+  box-sizing: border-box;
+}
+.counter-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10rem;
+  margin: 10rem;
+}
+
+.counter-wrapper > #minus-button,
+.counter-wrapper > #plus-button {
+  padding: 5rem;
+  font-size: 5rem;
+}
+
+.counter-wrapper > #number-result {
+  padding: 2rem;
+  color: #f00;
+  background-color: bisque;
+  width: 100%;
+  font-size: 5rem;
+  text-align: center;
+}
+
+.calc-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10rem;
+  margin: 10rem;
+  background-color: #ff0;
+}
+
+.calc-wrapper > #calc-button {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  font-size: 10rem;
+}
+
+.calc-wrapper > #calc-button > #calc-plus-button,
+.calc-wrapper > #calc-button > #calc-minus-button,
+.calc-wrapper > #calc-button > #calc-multiple-button,
+.calc-wrapper > #calc-button > #calc-divide-button {
+  font-size: 5rem;
+}
+
+.calc-wrapper > #number-target,
+.calc-wrapper > #number-amount,
+.calc-wrapper > #number-result {
+  padding: 0, 5px;
+}
