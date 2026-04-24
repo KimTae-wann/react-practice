@@ -15,26 +15,56 @@ export const HM0423 = () => {
     }
   };
 
-  const [targetData, setTargetData] = useState();
+  const [{ targetData, amountData, calcData }, setNums] = useState({
+    targetData: 0,
+    amountData: 0,
+    calcData: 0,
+  }); // cache 의 사용률을 줄일 수 있음
+
+  // const [targetData, setTargetData] = useState();
+  // const [amountData, setAmountData] = useState();
+  // const [calcData, setCalcData] = useState();
   const onTargetDataChange = (event) => {
-    setTargetData(parseInt(event.target.value));
+    setNums((prevNums) => {
+      const newNums = { ...prevNums, targetData: parseInt(event.target.value) };
+      return newNums;
+    });
   };
-
-  const [amountData, setAmountData] = useState();
+  // const onTargetDataChange = (event) => {
+  //   setTargetData(parseInt(event.target.value));
+  // };
   const onAmountDataChange = (event) => {
-    setAmountData(parseInt(event.target.value));
+    setNums((prevNums) => {
+      const newNums = { ...prevNums, amountData: parseInt(event.target.value) };
+      return newNums;
+    });
   };
 
-  const [calcData, setCalcData] = useState();
+  // const onAmountDataChange = (event) => {
+  //   setAmountData(parseInt(event.target.value));
+  // };
+
   const onCalcButtonClickHandler = (operator) => {
     if (operator === '+') {
-      setCalcData(targetData + amountData);
+      setNums((prevNums) => {
+        const newNums = { ...prevNums, calcData: targetData + amountData };
+        return newNums;
+      });
     } else if (operator === '-') {
-      setCalcData(targetData - amountData);
+      setNums((prevNums) => {
+        const newNums = { ...prevNums, calcData: targetData - amountData };
+        return newNums;
+      });
     } else if (operator === '*') {
-      setCalcData(targetData * amountData);
+      setNums((prevNums) => {
+        const newNums = { ...prevNums, calcData: targetData * amountData };
+        return newNums;
+      });
     } else if (operator === '/') {
-      setCalcData(targetData / amountData);
+      setNums((prevNums) => {
+        const newNums = { ...prevNums, calcData: targetData / amountData };
+        return newNums;
+      });
     }
   };
 
