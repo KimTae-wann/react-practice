@@ -1,0 +1,78 @@
+{
+  "articles": [
+    {
+      "id": "BO-20260423-000001",
+      "subject": "Test Subject 1",
+      "content": "Test Content 1",
+      "email": "admin@gmail.com",
+      "viewCnt": 1001,
+      "crtDt": "2026-04-23 09:10:11",
+      "mdfyDt": "2026-04-23 09:15:23",
+      "fileGroupId": "FG-20260423-000001",
+      "membersVO": { "email": "admin@gmail.com", "name": "Admin" },
+      "files": [
+        {
+          "fileNum": 1,
+          "fileGroupId": "FG-20260423-000001",
+          "displayName": "Testfile.exe",
+          "fileLength": 15000
+        }
+      ]
+    },
+    {
+      "id": "BO-20260423-000002",
+      "subject": "Test Subject 2",
+      "content": "Test Content 2",
+      "email": "admin@gmail.com",
+      "viewCnt": 1,
+      "crtDt": "2026-04-23 09:15:21",
+      "mdfyDt": null,
+      "fileGroupId": "FG-20260423-000002",
+      "membersVO": { "email": "admin@gmail.com", "name": "Admin" },
+      "files": [
+        {
+          "fileNum": 1,
+          "fileGroupId": "FG-20260423-000002",
+          "displayName": "Testfile2.exe",
+          "fileLength": 15400
+        },
+        {
+          "fileNum": 2,
+          "fileGroupId": "FG-20260423-000002",
+          "displayName": "Testfile3.exe",
+          "fileLength": 5400
+        },
+        {
+          "fileNum": 3,
+          "fileGroupId": "FG-20260423-000002",
+          "displayName": "Testfile3.exe",
+          "fileLength": 500
+        }
+      ]
+    },
+    {
+      "id": "BO-20260423-000003",
+      "subject": "Test Subject 3",
+      "content": "Test Content 3",
+      "email": "admin@gmail.com",
+      "viewCnt": 67,
+      "crtDt": "2026-04-23 09:18:21",
+      "mdfyDt": null,
+      "fileGroupId": null,
+      "membersVO": { "email": "admin@gmail.com", "name": "Admin" },
+      "files": []
+    },
+    {
+      "id": "BO-20260423-000004",
+      "subject": "Test Subject 4",
+      "content": "Test Content 4",
+      "email": "admin@gmail.com",
+      "viewCnt": 19,
+      "crtDt": "2026-04-23 09:28:51",
+      "mdfyDt": null,
+      "fileGroupId": null,
+      "membersVO": { "email": "admin@gmail.com", "name": "Admin" },
+      "files": []
+    }
+  ]
+}

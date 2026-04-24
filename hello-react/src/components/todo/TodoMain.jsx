@@ -3,6 +3,12 @@
 // (parameter) => {function body} : fat arrow function
 // const abc = () => {};
 
+import TodoHeader from './TodoHeader';
+import TodoList from './TodoList';
+import TodoAppender from './TodoAppender';
+import { StateTest } from './StateTest';
+import { useState } from 'react';
+
 // function과 fat arrow function의 기능적 차이
 // function => 함수를 호출한 대상을 this 객체로 알 수 있다
 // fat arrow function => this 키워드 사용 불가
@@ -12,8 +18,6 @@
 // export default const TodoMain = () => {};
 // export default 이후에 const 키워드가 나타날 수 없음.
 const TodoMain = () => {
-  const priorities = ['없음', '높음', '보통', '낮음']; // ECMAScript의 배열
-
   // const ==> 상수 정의
   // let ==> 변수 정의
   // TODO JSON DATA
@@ -23,20 +27,45 @@ const TodoMain = () => {
       todo: 'React Component Master',
       dueDate: '2026-04-22',
       priority: 1,
+      isDone: true,
     },
     {
       id: 'todo_2',
       todo: 'React Component Master',
       dueDate: '2026-04-23',
       priority: 2,
+      isDone: false,
     },
     {
       id: 'todo_3',
       todo: 'React Component Master',
       dueDate: '2026-04-24',
       priority: 3,
+      isDone: false,
     },
   ];
+
+  const [cachedData, setCachedData] = useState(todoDatas);
+
+  // 특정 todo의 isDone 값을 반전시키는 함수
+  // 이 함수를 TodoList에게 props로 전달
+  // TodoList는 TodoItem에게 함수를 props로 전달
+  const onDoneChangeHandler = (todoId) => {
+    setCachedData((prevData) => {
+      const newStateMemory = [...prevData]; // 데이터는 유지하지만 메모리만 바꿔라
+
+      // java for each
+      for (const todo of newStateMemory) {
+        if (todo.id === todoId) {
+          todo.isDone = true;
+          break;
+        }
+      }
+      return newStateMemory;
+    });
+
+    console.log(todoId, todoDatas);
+  };
 
   const onTaskKeyUpHandler = (event) => {
     console.log(event.target.value);
@@ -57,40 +86,18 @@ const TodoMain = () => {
   // 컴포넌트가 만들어줄 HTML Tag set를 반환.
   return (
     <div className="wrapper">
+      {/* <StateTest /> */}
       <header>React Todo</header>
       <ul className="tasks">
-        <li className="tasks-header">
-          <input id="checkall" type="checkbox" />
-          <label>Task</label>
-          <span className="due-date">Due date</span>
-          <span className="priority">Priority</span>
-        </li>
-        {todoDatas.map((todo) => (
-          <li className="tasks-item">
-            <input id={todo.id} type="checkbox" />
-            <label htmlFor={todo.id}>{todo.todo}</label>
-            <span className="due-date">{todo.dueDate}</span>
-            <span className="priority">{priorities[todo.priority]}</span>
-          </li>
-        ))}
+        <TodoHeader />
+        <TodoList todoDatas={cachedData} onDoneChange={onDoneChangeHandler} />
       </ul>
-      <footer>
-        <input
-          type="text"
-          placeholder="Input new Task"
-          onKeyUp={onTaskKeyUpHandler} // 너무 길어지면 가독성이 떨어지므로 분리해서 적어준다.
-        />
-        <input type="date" onChange={onDateChangeHandler} />
-        <select onChange={onPrioritySelectChangeHandler}>
-          <option>우선순위</option>
-          <option value="1">높음</option>
-          <option value="2">보통</option>
-          <option value="3">낮음</option>
-        </select>
-        <button type="button" onClick={onSaveButtonClickHandler}>
-          Save
-        </button>
-      </footer>
+      <TodoAppender
+        onTaskKeyUp={onTaskKeyUpHandler}
+        onDateChange={onDateChangeHandler}
+        onPrioritySelectChange={onPrioritySelectChangeHandler}
+        onSaveButtonClick={onSaveButtonClickHandler}
+      />
     </div>
   );
 };
