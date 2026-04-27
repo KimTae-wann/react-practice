@@ -95,13 +95,6 @@ const ArticleMain = () => {
         name: '',
       },
     }));
-    setIsWrite(false);
-  };
-
-  const [isWrite, setIsWrite] = useState(false);
-
-  const onWriteButtonClickHandler = () => {
-    setIsWrite(true);
   };
 
   return (
@@ -111,36 +104,18 @@ const ArticleMain = () => {
         <ArticleHeader />
         <ArticleList contents={articles} />
       </table>
-      {!isWrite ? (
-        <button
-          type="button"
-          className="write-mode-button"
-          onClick={onWriteButtonClickHandler}
-          style={{
-            width: '100%',
-            padding: '1rem',
-            marginTop: '1rem',
-            backgroundColor: '#345571',
-            fontSize: '1rem',
-            color: '#fff',
-          }}
-        >
-          글쓰기
-        </button>
-      ) : (
-        <ArticleWriter
-          subject={subject}
-          name={name}
-          email={email}
-          content={content}
-          onSubjectChange={onSubjectChangeHandler}
-          onNameChange={onNameChangeHandler}
-          onEmailChange={onEmailChangeHandler}
-          onContentChange={onContentChangeHandler}
-          onSaveButtonClick={onSaveButtonClickHandler}
-          onResetButtonClick={onResetButtonClickHandler}
-        />
-      )}
+      <ArticleWriter
+        subject={subject}
+        name={name}
+        email={email}
+        content={content}
+        onSubjectChange={onSubjectChangeHandler}
+        onNameChange={onNameChangeHandler}
+        onEmailChange={onEmailChangeHandler}
+        onContentChange={onContentChangeHandler}
+        onSaveButtonClick={onSaveButtonClickHandler}
+        onResetButtonClick={onResetButtonClickHandler}
+      />
     </div>
   );
 };
