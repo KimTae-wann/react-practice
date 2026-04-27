@@ -87,29 +87,7 @@ const TodoMain = () => {
     console.log(todoId, todoDatas);
   };
 
-  const onTaskKeyUpHandler = (event) => {
-    console.log(event.target.value);
-    setNewTodoData((prevData) => ({ ...prevData, todo: event.target.value }));
-  };
-
-  const onDateChangeHandler = (event) => {
-    console.log(event.target.value);
-    setNewTodoData((prevData) => ({
-      ...prevData,
-      dueDate: event.target.value,
-    }));
-  };
-
-  const onPrioritySelectChangeHandler = (event) => {
-    console.log(event.target.value);
-    setNewTodoData((prevData) => ({
-      ...prevData,
-      priority: parseInt(event.target.value),
-    }));
-  };
-
-  const onSaveButtonClickHandler = () => {
-    console.log('저장합니다');
+  const onSaveButtonClickHandler = (todo, dueDate, priority) => {
     setCachedData((prevData) => [
       ...prevData,
       { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
@@ -126,13 +104,7 @@ const TodoMain = () => {
         <TodoHeader onAllDoneChange={onAllDoneChangeHandler} />
         <TodoList todoDatas={cachedData} onDoneChange={onDoneChangeHandler} />
       </ul>
-      <TodoAppender
-        inputData={{ todo, dueDate, priority }}
-        onTaskKeyUp={onTaskKeyUpHandler}
-        onDateChange={onDateChangeHandler}
-        onPrioritySelectChange={onPrioritySelectChangeHandler}
-        onSaveButtonClick={onSaveButtonClickHandler}
-      />
+      <TodoAppender onSaveButtonClick={onSaveButtonClickHandler} />
     </div>
   );
 };
