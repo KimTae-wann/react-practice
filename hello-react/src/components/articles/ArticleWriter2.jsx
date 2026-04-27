@@ -30,27 +30,25 @@ const ArticleWriter2 = ({ onSaveButtonClick }) => {
 
   const [viewMode, setViewMode] = useState('button');
 
-  const [errorMessage, setErrorMessage] = useState();
-
   // 저장을 클릭하면 입력했던 값을 가져와 출력한다.
   const onSaveButtonClickHandler = () => {
     console.log(alertRef);
 
     if (!subjectRef.current.value) {
-      alertRef.current.showModal();
-      setErrorMessage('제목을 입력해주세요');
+      alertRef.current.showModal('제목을 입력해주세요.');
+      return;
     }
     if (!nameRef.current.value) {
-      alertRef.current.showModal();
-      setErrorMessage('이름을 입력해주세요');
+      alertRef.current.showModal('이름을 입력해주세요.');
+      return;
     }
     if (!emailRef.current.value) {
-      alertRef.current.showModal();
-      setErrorMessage('이메일을 입력해주세요');
+      alertRef.current.showModal('이메일을 입력해주세요.');
+      return;
     }
     if (!contentRef.current.value) {
-      alertRef.current.showModal();
-      setErrorMessage('내용을 입력해주세요');
+      alertRef.current.showModal('내용을 입력해주세요.');
+      return;
     }
 
     onSaveButtonClick(
@@ -92,9 +90,7 @@ const ArticleWriter2 = ({ onSaveButtonClick }) => {
       )}
       {viewMode === 'form' && (
         <>
-          <Alert dialogRef={alertRef}>
-            <div>{errorMessage}</div>
-          </Alert>
+          <Alert dialogRef={alertRef} />
           <Input id="subject" title="제목" ref={subjectRef} />
           <Input id="name" title="이름" ref={nameRef} />
           <Input id="email" title="이메일" ref={emailRef} />

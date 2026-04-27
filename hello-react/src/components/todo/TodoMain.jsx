@@ -65,19 +65,6 @@ const TodoMain = () => {
   // 이 함수를 TodoList에게 props로 전달
   // TodoList는 TodoItem에게 함수를 props로 전달
   const onDoneChangeHandler = (todoId, isDone) => {
-    // setCachedData((prevData) => {
-    //   const newStateMemory = [...prevData]; // 데이터는 유지하지만 메모리만 바꿔라
-
-    //   // java for each
-    //   for (const todo of newStateMemory) {
-    //     if (todo.id === todoId) {
-    //       todo.isDone = isDone;
-    //       break;
-    //     }
-    //   }
-    //   return newStateMemory;
-    // });
-
     setCachedData((prevData) =>
       prevData.map((item) =>
         item.id === todoId ? { ...item, isDone: !item.isDone } : item,

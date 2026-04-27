@@ -37,33 +37,50 @@ export const Alert = ({ dialogRef }) => {
   );
 };
 
-export const Confirm = ({ children, onOkClick, onCloseClick }) => {
+export const Confirm = ({ dialogRef, onOkClick, onCloseClick }) => {
+  const [confirmMessage, setConfirmMessage] = useState();
+  const confirmDialogRef = useRef();
+
+  useImperativeHandle(dialogRef, () => {
+    // console.log('alert');
+    // dialogRef에게 할당해줄 데이터 들을 반환
+    return {
+      //showModal: function () {}
+      showConfirm(message) {
+        setConfirmMessage(message);
+        confirmDialogRef.current.showModal();
+      },
+    };
+  });
+
   const onOkClickHandler = () => {
+    confirmDialogRef.current.close();
     onOkClick();
   };
 
   const onCloseClickHandler = () => {
+    confirmDialogRef.current.close();
     onCloseClick();
   };
 
   return (
-    <dialog className="modal">
+    <dialog className="modal" ref={confirmDialogRef}>
       <div className="modal-body">
-        {children}
+        {confirmMessage}
         <section>
           <button
             type="button"
             className="confirm-ok"
             onClick={onOkClickHandler}
           >
-            OK
+            확인
           </button>
           <button
             type="button"
             className="confirm-cancel"
             onClick={onCloseClickHandler}
           >
-            Cancel
+            취소
           </button>
         </section>
       </div>
