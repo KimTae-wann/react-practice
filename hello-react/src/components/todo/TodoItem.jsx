@@ -1,9 +1,23 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { Confirm } from '../ui/TodoModals';
+import TodoContext from './contexts/TodoContext.jsx';
 
-const TodoItem = ({ todo, priorities, onDoneChange }) => {
-  //        props todo의 이름과 todo.todo의 이름이 같아 객체 구조 분해 불가.
-  //        todo.todo의 이름을 todoTask로 변경해 할당.
+const TodoItem = ({ todo, onDoneChange }) => {
+  const priorities = ['없음', '높음', '보통', '낮음']; // ECMAScript의 배열
+
+  const checkboxRef = useRef();
+  const confirmRef = useRef();
+
+  const { componentName } = useContext(TodoContext);
+
+  // console.log('TodoItem :' + componentName);
+
+  if (!componentName || componentName !== 'TodoList') {
+    return <></>;
+  }
+
+  // props todo의 이름과 todo.todo의 이름이 같아 객체 구조 분해 불가.
+  // todo.todo의 이름을 todoTask로 변경해 할당.
   const { id, todo: todoTask, dueDate, priority } = todo;
 
   const doneClass = todo.isDone ? 'done' : '';
@@ -11,9 +25,6 @@ const TodoItem = ({ todo, priorities, onDoneChange }) => {
   const onDoneChangeHandler = () => {
     onDoneChange(id);
   };
-
-  const checkboxRef = useRef();
-  const confirmRef = useRef();
 
   const onDoneConfirmChangeHandler = () => {
     const checked = checkboxRef.current.checked;
