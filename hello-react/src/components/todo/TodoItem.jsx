@@ -33,7 +33,7 @@ const TodoItem = ({ todo, priorities, onDoneChange }) => {
   };
 
   const onConfirmCloseClickHandler = () => {
-    checkboxRef.current.checked = todo.isDone;
+    // checkboxRef.current.checked = todo.isDone;
   };
 
   return (

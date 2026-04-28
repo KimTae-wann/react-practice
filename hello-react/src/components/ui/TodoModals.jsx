@@ -1,4 +1,5 @@
 import { useImperativeHandle, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export const Alert = ({ dialogRef }) => {
   const alertModalRef = useRef();
@@ -26,20 +27,30 @@ export const Alert = ({ dialogRef }) => {
   };
 
   return (
-    <dialog className="modal" ref={alertModalRef}>
-      <div className="modal-body">
-        <section className="modal-close-button" onClick={onCloseClickHandler}>
-          X
-        </section>
-        <div>{errorMessage}</div>
-      </div>
-    </dialog>
+    <>
+      {createPortal(
+        <dialog className="modal" ref={alertModalRef}>
+          <div className="modal-body">
+            <section
+              className="modal-close-button"
+              onClick={onCloseClickHandler}
+            >
+              X
+            </section>
+            <div>{errorMessage}</div>
+          </div>
+        </dialog>,
+        document.querySelector('#modals'),
+      )}
+    </>
   );
 };
 
 export const Confirm = ({ dialogRef, onOkClick, onCloseClick }) => {
   const [confirmMessage, setConfirmMessage] = useState();
   const confirmDialogRef = useRef();
+
+  const handledFromEvents = useRef({ fired: false });
 
   useImperativeHandle(dialogRef, () => {
     // console.log('alert');
@@ -54,36 +65,55 @@ export const Confirm = ({ dialogRef, onOkClick, onCloseClick }) => {
   });
 
   const onOkClickHandler = () => {
+    handledFromEvents.fired = true;
     confirmDialogRef.current.close();
     onOkClick();
   };
 
   const onCloseClickHandler = () => {
+    handledFromEvents.fired = true;
     confirmDialogRef.current.close();
     onCloseClick();
   };
 
+  const onCloseNative = () => {
+    if (!handledFromEvents.fired) {
+      onCloseClick();
+    }
+
+    handledFromEvents.fired = false;
+  };
+
   return (
-    <dialog className="modal" ref={confirmDialogRef}>
-      <div className="modal-body">
-        {confirmMessage}
-        <section>
-          <button
-            type="button"
-            className="confirm-ok"
-            onClick={onOkClickHandler}
-          >
-            확인
-          </button>
-          <button
-            type="button"
-            className="confirm-cancel"
-            onClick={onCloseClickHandler}
-          >
-            취소
-          </button>
-        </section>
-      </div>
-    </dialog>
+    <>
+      {createPortal(
+        <dialog
+          className="modal"
+          ref={confirmDialogRef}
+          onClose={onCloseNative}
+        >
+          <div className="modal-body">
+            {confirmMessage}
+            <section>
+              <button
+                type="button"
+                className="confirm-ok"
+                onClick={onOkClickHandler}
+              >
+                확인
+              </button>
+              <button
+                type="button"
+                className="confirm-cancel"
+                onClick={onCloseClickHandler}
+              >
+                취소
+              </button>
+            </section>
+          </div>
+        </dialog>,
+        document.querySelector('#confirm'),
+      )}
+    </>
   );
 };
