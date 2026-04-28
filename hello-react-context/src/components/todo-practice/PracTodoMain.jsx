@@ -30,35 +30,66 @@ const PracTodoMain = () => {
 
   const onSaveButtonClickHandler = () => {
     console.log('저장합니다');
+    setCachedData((prevData) => [
+      ...prevData,
+      { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
+    ]);
+    setNewTodoDate({ todo: '', dueDate: '', priority: 0 });
   };
 
   const [cachedData, setCachedData] = useState(todoDatas);
+  const [{ todo, dueDate, priority }, setNewTodoDate] = useState({
+    todo: '',
+    duedate: '',
+    priority: 0,
+  });
+
+  const onAllDoneChangeHandler = (isDone) => {
+    setCachedData((prevData) => {
+      return prevData.map((todo) => ({ ...todo, isDone }));
+    });
+  };
 
   const onDoneChangeHandler = (todoId) => {
-    setCachedData((prevData) => {
-      const newStateMemory = [...prevData];
-
-      for (const todo of newStateMemory) {
-        if (todo.id === todoId) {
-          todo.isDone = true;
-          break;
-        }
-      }
-      return newStateMemory;
-    });
+    setCachedData((prevData) =>
+      prevData.map((item) =>
+        item.id === todoId ? { ...item, isDone: !item.isDone } : item,
+      ),
+    );
+  };
+  const onTaskKeyUpHandler = (event) => {
+    setNewTodoDate((prevData) => ({ ...prevData, todo: event.target.value }));
+  };
+  const onDateChangeHandler = (event) => {
+    setNewTodoDate((prevData) => ({
+      ...prevData,
+      dueDate: event.target.value,
+    }));
+  };
+  const onPriorityChangeHandler = (event) => {
+    setNewTodoDate((prevData) => ({
+      ...prevData,
+      priority: parseInt(event.target.value),
+    }));
   };
 
   return (
     <div className="wrapper">
       <header>React Todo</header>
       <ul className="tasks">
-        <PracTodoHeader />
+        <PracTodoHeader onAllDoneChange={onAllDoneChangeHandler} />
         <PracTodoList
           todoDatas={cachedData}
           onDoneChange={onDoneChangeHandler}
         />
       </ul>
-      <PracTodoAppender onSaveButtonClick={onSaveButtonClickHandler} />
+      <PracTodoAppender
+        inputData={{ todo, dueDate, priority }}
+        onTaskKeyUp={onTaskKeyUpHandler}
+        onDateChange={onDateChangeHandler}
+        onPrioritySelectChange={onPriorityChangeHandler}
+        onSaveButtonClick={onSaveButtonClickHandler}
+      />
     </div>
   );
 };
