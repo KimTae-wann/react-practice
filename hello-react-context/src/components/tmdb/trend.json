@@ -1,0 +1,83 @@
+{
+  "sectionName": "트렌드",
+  "selectorsKR": ["오늘", "이번 주"],
+  "selectors": ["today", "week"],
+  "items": {
+    "today": [
+      {
+        "id": "1292695-they-will-kill-you",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/6oI4oQKTWMVUlr8Ivqydp28Ruu6.jpg 1x",
+        "name": "데이 윌 킬 유",
+        "openDate": "3월 25, 2026"
+      },
+      {
+        "id": "1318447-apex",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/wGHGVAJGTn2BqsuFfPK8lzPiKjH.jpg 1x",
+        "name": "정점",
+        "openDate": "4월 24, 2026"
+      },
+      {
+        "id": "85552-euphoria",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/cQMOyNLS1RsQIMlmVR6MEk2fvii.jpg 1x",
+        "name": "유포리아",
+        "openDate": "6월 16, 2026"
+      },
+      {
+        "id": "936075-michael",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/piMZqtd0gGS7OgkhDwiQ7vVViBQ.jpg 1x",
+        "name": "마이클",
+        "openDate": "5월 13, 2026"
+      },
+      {
+        "id": "124364-from",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/4CMvJXoenv5LeMLcPdPpAT98wpS.jpg 1x",
+        "name": "프롬",
+        "openDate": "2월 20, 2022"
+      },
+      {
+        "id": "76479-the-boys",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/ilSwgC9i8KsnXEv9aH8MUcaWvbW.jpg 1x",
+        "name": "더 보이즈",
+        "openDate": "7월 25, 2019"
+      }
+    ],
+    "week": [
+      {
+        "id": "1318447-apex",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/wGHGVAJGTn2BqsuFfPK8lzPiKjH.jpg 1x",
+        "name": "정점",
+        "openDate": "4월 24, 2026"
+      },
+      {
+        "id": "124364-from",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/4CMvJXoenv5LeMLcPdPpAT98wpS.jpg 1x",
+        "name": "프롬",
+        "openDate": "2월 20, 2022"
+      },
+      {
+        "id": "936075-michael",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/piMZqtd0gGS7OgkhDwiQ7vVViBQ.jpg 1x",
+        "name": "마이클",
+        "openDate": "5월 13, 2026"
+      },
+      {
+        "id": "85552-euphoria",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/cQMOyNLS1RsQIMlmVR6MEk2fvii.jpg 1x",
+        "name": "유포리아",
+        "openDate": "6월 16, 2026"
+      },
+      {
+        "id": "76479-the-boys",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/ilSwgC9i8KsnXEv9aH8MUcaWvbW.jpg 1x",
+        "name": "더 보이즈",
+        "openDate": "7월 25, 2019"
+      },
+      {
+        "id": "687163-project-hail-mary",
+        "poster": "https://media.themoviedb.org/t/p/w220_and_h330_face/qqGpVVZk2KD1lAvccgTU4Z6nh1H.jpg 1x",
+        "name": "프로젝트 헤일메리",
+        "openDate": "3월 18일, 2026"
+      }
+    ]
+  }
+}
