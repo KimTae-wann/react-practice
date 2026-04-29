@@ -1,52 +1,100 @@
 export const fetchTodoList = async () => {
-  const todoResponse = await fetch('http://localhost:8888/api/v1/task');
-  console.log(todoResponse);
+  try {
+    const todoResponse = await fetch('http://localhost:8888/api/v1/task');
+    console.log(todoResponse);
 
-  const todoList = await todoResponse.json(); // 비동기 함수
-  console.log(todoList);
+    const todoList = await todoResponse.json(); // 비동기 함수
+    console.log(todoList);
 
-  return todoList;
+    return todoList;
+  } catch (e) {
+    return {
+      status: 500,
+      statusMessage: 'Internal Server Error',
+      pages: 0,
+      next: false,
+      errors: '서비스가 잠시 중단되었습니다. 잠시 후 다시 시도해주세요.',
+      count: 0,
+      body: [],
+    };
+  }
 };
 
 export const fetchDoneTodo = async (todoId) => {
-  const fetchResult = await fetch(
-    `http://localhost:8888/api/v1/task/${todoId}`,
-    { method: 'put' },
-  );
-  console.log(fetchResult);
+  try {
+    const fetchResult = await fetch(
+      `http://localhost:8888/api/v1/task/${todoId}`,
+      { method: 'put' },
+    );
+    console.log(fetchResult);
 
-  const doneResult = await fetchResult.json();
-  console.log(doneResult);
+    const doneResult = await fetchResult.json();
+    console.log(doneResult);
 
-  return doneResult;
+    return doneResult;
+  } catch (e) {
+    return {
+      status: 500,
+      statusMessage: 'Internal Server Error',
+      pages: 0,
+      next: false,
+      errors: '서비스가 잠시 중단되었습니다. 잠시 후 다시 시도해주세요.',
+      count: 0,
+      body: [],
+    };
+  }
 };
 
 export const fetchAllDoneTodo = async () => {
-  const fetchList = await fetch('http://localhost:8888/api/v1/task', {
-    method: 'put',
-  });
+  try {
+    const fetchList = await fetch('http://localhost:8888/api/v1/task', {
+      method: 'put',
+    });
 
-  const allDoneResult = await fetchList.json();
+    const allDoneResult = await fetchList.json();
 
-  return allDoneResult;
+    return allDoneResult;
+  } catch (e) {
+    return {
+      status: 500,
+      statusMessage: 'Internal Server Error',
+      pages: 0,
+      next: false,
+      errors: '서비스가 잠시 중단되었습니다. 잠시 후 다시 시도해주세요.',
+      count: 0,
+      body: [],
+    };
+  }
 };
 
 export const fetchAddTodo = async ({ todo, dueDate, priority }) => {
-  const fetchResult = await fetch('http://localhost:8888/api/v1/task', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      task: todo,
-      dueDate,
-      priority,
-      isDone: false,
-    }),
-  });
+  try {
+    const fetchResult = await fetch('http://localhost:8888/api/v1/task', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        task: todo,
+        dueDate,
+        priority,
+        isDone: false,
+      }),
+    });
 
-  const addResult = await fetchResult.json();
-  console.log(addResult);
+    const addResult = await fetchResult.json();
+    console.log(addResult);
 
-  return addResult;
+    return addResult;
+  } catch (e) {
+    return {
+      status: 500,
+      statusMessage: 'Internal Server Error',
+      pages: 0,
+      next: false,
+      errors: '서비스가 잠시 중단되었습니다. 잠시 후 다시 시도해주세요.',
+      count: 0,
+      body: {},
+    };
+  }
 };

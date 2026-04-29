@@ -39,6 +39,10 @@ const TodoMain = () => {
     const todoList = await fetchTodoList();
 
     setCachedData(todoList.body);
+
+    if (todoList.errors) {
+      alert(todoList.errors);
+    }
   };
   useEffect(() => {
     // 의존배열에 변화가 생기지 않으면 호출X
@@ -55,7 +59,11 @@ const TodoMain = () => {
 
   const onAllDoneChangeHandler = useCallback(async () => {
     const allDoneResult = await fetchAllDoneTodo();
-    refreshTodoList();
+    if (!allDoneResult.errors) {
+      refreshTodoList();
+    } else {
+      alert(allDoneResult.errors);
+    }
     // setCachedData((prevData) => {
     //   // cachedData를 반복하면서 모든 isDone의 값을 변경한다.
     //   const newData = prevData.map((todo) => ({ ...todo, done }));
@@ -69,7 +77,11 @@ const TodoMain = () => {
   // TodoList는 TodoItem에게 함수를 props로 전달
   const onDoneChangeHandler = async (todoId) => {
     const doneResult = await fetchDoneTodo();
-    refreshTodoList();
+    if (!doneResult.errors) {
+      refreshTodoList();
+    } else {
+      alert(doneResult.errors);
+    }
 
     // setCachedData((prevData) =>
     //   prevData.map((item) =>
@@ -92,7 +104,11 @@ const TodoMain = () => {
     async (todo, dueDate, priority) => {
       console.log('저장합니다');
       const addResult = fetchAddTodo(todo, dueDate, priority);
-      refreshTodoList();
+      if (!addResult.errors) {
+        refreshTodoList();
+      } else {
+        alert(addResult.errors);
+      }
     },
     [],
   );
