@@ -11,6 +11,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoGrid from './TodoGrid';
 import AddCalculator from './AddCalculator';
+import {
+  fetchAddTodo,
+  fetchAllDoneTodo,
+  fetchDoneTodo,
+  fetchTodoList,
+} from '../../http/todo/fetchTodo';
 
 // function과 fat arrow function의 기능적 차이
 // function => 함수를 호출한 대상을 this 객체로 알 수 있다
@@ -29,18 +35,14 @@ const TodoMain = () => {
   const [cachedData, setCachedData] = useState([]);
 
   // Eternal Loop
-  const fetchTodoList = async () => {
-    const todoResponse = await fetch('http://localhost:8888/api/v1/task');
-    console.log(todoResponse);
-
-    const todoList = await todoResponse.json(); // 비동기 함수
-    console.log(todoList);
+  const refreshTodoList = async () => {
+    const todoList = await fetchTodoList();
 
     setCachedData(todoList.body);
   };
   useEffect(() => {
     // 의존배열에 변화가 생기지 않으면 호출X
-    fetchTodoList();
+    refreshTodoList();
   }, []);
 
   const todoCount = useMemo(() => {
@@ -51,36 +53,35 @@ const TodoMain = () => {
     };
   }, [cachedData]);
 
-  const onAllDoneChangeHandler = useCallback((done) => {
-    setCachedData((prevData) => {
-      // cachedData를 반복하면서 모든 isDone의 값을 변경한다.
-      const newData = prevData.map((todo) => ({ ...todo, done }));
-      // 변경된 결과를 반환한다.
-      return newData;
-    });
+  const onAllDoneChangeHandler = useCallback(async () => {
+    const allDoneResult = await fetchAllDoneTodo();
+    refreshTodoList();
+    // setCachedData((prevData) => {
+    //   // cachedData를 반복하면서 모든 isDone의 값을 변경한다.
+    //   const newData = prevData.map((todo) => ({ ...todo, done }));
+    //   // 변경된 결과를 반환한다.
+    //   return newData;
+    // });
   }, []);
-
-  const [{ todo, dueDate, priority }, setNewTodoData] = useState({
-    todo: '',
-    dueDate: '',
-    priority: 0,
-  });
 
   // 특정 todo의 isDone 값을 반전시키는 함수
   // 이 함수를 TodoList에게 props로 전달
   // TodoList는 TodoItem에게 함수를 props로 전달
-  const onDoneChangeHandler = (todoId) => {
-    setCachedData((prevData) =>
-      prevData.map((item) =>
-        item.id === todoId ? { ...item, done: !item.done } : item,
-      ),
-    );
+  const onDoneChangeHandler = async (todoId) => {
+    const doneResult = await fetchDoneTodo();
+    refreshTodoList();
 
-    console.log(todoId, []);
+    // setCachedData((prevData) =>
+    //   prevData.map((item) =>
+    //     item.id === todoId ? { ...item, done: !item.done } : item,
+    //   ),
+    // );
+
+    // console.log(todoId, []);
   };
 
   // 리렌더링 되지 않게 변경
-  const onSaveButtonClickHandler = useCallback((todo, dueDate, priority) => {
+  const onSaveButtonClickHandler = useCallback(
     // setCachedData((prevData) => [
     //   ...prevData,
     //   { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
@@ -88,24 +89,13 @@ const TodoMain = () => {
     // setNewTodoData({ todo: '', dueDate: '', priority: 0 });
 
     // fetch --> 서버에게 todo를 등록하게 한다.
-    const fetchResult = async () => {
-      const a = await fetch('http://localhost:8888/api/v1/task', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          task: todo,
-          dueDate,
-          priority,
-          isDone: false,
-        }),
-      });
-      const addResult = await a.json();
-      console.log(addResult);
-    };
-    fetchResult();
-  }, []);
+    async (todo, dueDate, priority) => {
+      console.log('저장합니다');
+      const addResult = fetchAddTodo(todo, dueDate, priority);
+      refreshTodoList();
+    },
+    [],
+  );
 
   // 컴포넌트가 만들어줄 HTML Tag set를 반환.
   return (
