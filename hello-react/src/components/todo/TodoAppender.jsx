@@ -1,7 +1,9 @@
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import { Alert } from '../ui/TodoModals';
 
-const TodoAppender = ({ onSaveButtonClick }) => {
+const TodoAppender = memo(({ onSaveButtonClick }) => {
+  console.log('TodoAppender');
+
   const todoRef = useRef();
   const dateRef = useRef();
   const priorityRef = useRef();
@@ -48,6 +50,6 @@ const TodoAppender = ({ onSaveButtonClick }) => {
       </button>
     </footer>
   );
-};
+});
 
 export default TodoAppender;

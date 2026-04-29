@@ -47,6 +47,7 @@ export const Alert = ({ dialogRef }) => {
 };
 
 export const Confirm = ({ dialogRef, onOkClick, onCloseClick }) => {
+  console.log('Confirm');
   const [confirmMessage, setConfirmMessage] = useState();
   const confirmDialogRef = useRef();
 

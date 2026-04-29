@@ -3,6 +3,7 @@ import { Confirm } from '../ui/TodoModals';
 import TodoContext from './contexts/TodoContext.jsx';
 
 const TodoItem = ({ todo, onDoneChange }) => {
+  console.log('TodoItem');
   const priorities = ['없음', '높음', '보통', '낮음']; // ECMAScript의 배열
 
   const checkboxRef = useRef();
