@@ -19,9 +19,9 @@ const TodoItem = ({ todo, onDoneChange }) => {
 
   // props todo의 이름과 todo.todo의 이름이 같아 객체 구조 분해 불가.
   // todo.todo의 이름을 todoTask로 변경해 할당.
-  const { id, todo: todoTask, dueDate, priority } = todo;
+  const { id, task: todoTask, dueDate, priority } = todo;
 
-  const doneClass = todo.isDone ? 'done' : '';
+  const doneClass = todo.done ? 'done' : '';
 
   const onDoneChangeHandler = () => {
     onDoneChange(id);
@@ -45,7 +45,7 @@ const TodoItem = ({ todo, onDoneChange }) => {
   };
 
   const onConfirmCloseClickHandler = () => {
-    // checkboxRef.current.checked = todo.isDone;
+    // checkboxRef.current.checked = todo.done;
   };
 
   return (
@@ -62,7 +62,7 @@ const TodoItem = ({ todo, onDoneChange }) => {
       <input
         id={id}
         type="checkbox"
-        checked={todo.isDone}
+        checked={todo.done}
         onChange={onDoneConfirmChangeHandler}
         ref={checkboxRef}
       />

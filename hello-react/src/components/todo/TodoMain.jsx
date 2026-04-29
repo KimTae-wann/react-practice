@@ -7,7 +7,7 @@ import TodoHeader from './TodoHeader';
 import TodoList from './TodoList';
 import TodoAppender from './TodoAppender';
 import { StateTest } from './StateTest';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import TodoItem from './TodoItem';
 import TodoGrid from './TodoGrid';
 import AddCalculator from './AddCalculator';
@@ -25,44 +25,36 @@ const TodoMain = () => {
   // const ==> 상수 정의
   // let ==> 변수 정의
   // TODO JSON DATA
-  const todoDatas = [
-    {
-      id: 'todo_1',
-      todo: 'React Component Master1',
-      dueDate: '2026-04-22',
-      priority: 1,
-      isDone: true,
-    },
-    {
-      id: 'todo_2',
-      todo: 'React Component Master2',
-      dueDate: '2026-04-23',
-      priority: 2,
-      isDone: false,
-    },
-    {
-      id: 'todo_3',
-      todo: 'React Component Master3',
-      dueDate: '2026-04-24',
-      priority: 3,
-      isDone: false,
-    },
-  ];
 
-  const [cachedData, setCachedData] = useState(todoDatas);
+  const [cachedData, setCachedData] = useState([]);
+
+  // Eternal Loop
+  const fetchTodoList = async () => {
+    const todoResponse = await fetch('http://localhost:8888/api/v1/task');
+    console.log(todoResponse);
+
+    const todoList = await todoResponse.json(); // 비동기 함수
+    console.log(todoList);
+
+    setCachedData(todoList.body);
+  };
+  useEffect(() => {
+    // 의존배열에 변화가 생기지 않으면 호출X
+    fetchTodoList();
+  }, []);
 
   const todoCount = useMemo(() => {
     return {
       all: cachedData.length,
-      done: cachedData.filter((todo) => todo.isDone).length,
-      process: cachedData.filter((todo) => !todo.isDone).length,
+      done: cachedData.filter((todo) => todo.done).length,
+      process: cachedData.filter((todo) => !todo.done).length,
     };
   }, [cachedData]);
 
-  const onAllDoneChangeHandler = useCallback((isDone) => {
+  const onAllDoneChangeHandler = useCallback((done) => {
     setCachedData((prevData) => {
       // cachedData를 반복하면서 모든 isDone의 값을 변경한다.
-      const newData = prevData.map((todo) => ({ ...todo, isDone }));
+      const newData = prevData.map((todo) => ({ ...todo, done }));
       // 변경된 결과를 반환한다.
       return newData;
     });
@@ -77,30 +69,49 @@ const TodoMain = () => {
   // 특정 todo의 isDone 값을 반전시키는 함수
   // 이 함수를 TodoList에게 props로 전달
   // TodoList는 TodoItem에게 함수를 props로 전달
-  const onDoneChangeHandler = (todoId, isDone) => {
+  const onDoneChangeHandler = (todoId) => {
     setCachedData((prevData) =>
       prevData.map((item) =>
-        item.id === todoId ? { ...item, isDone: !item.isDone } : item,
+        item.id === todoId ? { ...item, done: !item.done } : item,
       ),
     );
 
-    console.log(todoId, todoDatas);
+    console.log(todoId, []);
   };
 
   // 리렌더링 되지 않게 변경
   const onSaveButtonClickHandler = useCallback((todo, dueDate, priority) => {
-    setCachedData((prevData) => [
-      ...prevData,
-      { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
-    ]);
-    setNewTodoData({ todo: '', dueDate: '', priority: 0 });
+    // setCachedData((prevData) => [
+    //   ...prevData,
+    //   { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
+    // ]);
+    // setNewTodoData({ todo: '', dueDate: '', priority: 0 });
+
+    // fetch --> 서버에게 todo를 등록하게 한다.
+    const fetchResult = async () => {
+      const a = await fetch('http://localhost:8888/api/v1/task', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          task: todo,
+          dueDate,
+          priority,
+          isDone: false,
+        }),
+      });
+      const addResult = await a.json();
+      console.log(addResult);
+    };
+    fetchResult();
   }, []);
 
   // 컴포넌트가 만들어줄 HTML Tag set를 반환.
   return (
     <div className="wrapper">
       {/* <StateTest /> */}
-      <AddCalculator />
+      {/* <AddCalculator /> */}
       <header>React Todo</header>
       <TodoGrid>
         {/* <TodoHeader onAllDoneChange={onAllDoneChangeHandler} /> */}
