@@ -1,8 +1,10 @@
 import { useContext, useRef } from 'react';
 import { Confirm } from '../ui/TodoModals';
 import TodoContext from './contexts/TodoContext.jsx';
+import { fetchDoneTodo, fetchTodoList } from '../../http/todo/fetchTodo.js';
+import { useDispatch } from 'react-redux';
 
-const TodoItem = ({ todo, onDoneChange }) => {
+const TodoItem = ({ todo }) => {
   console.log('TodoItem');
   const priorities = ['없음', '높음', '보통', '낮음']; // ECMAScript의 배열
 
@@ -12,6 +14,8 @@ const TodoItem = ({ todo, onDoneChange }) => {
   const { componentName } = useContext(TodoContext);
 
   // console.log('TodoItem :' + componentName);
+
+  const reactReduxDispatcher = useDispatch();
 
   if (!componentName || componentName !== 'TodoList') {
     return <></>;
@@ -23,25 +27,29 @@ const TodoItem = ({ todo, onDoneChange }) => {
 
   const doneClass = todo.done ? 'done' : '';
 
-  const onDoneChangeHandler = () => {
-    onDoneChange(id);
+  const onDoneChangeHandler = async () => {
+    reactReduxDispatcher({ type: 'todo-done-item', payload: id });
+    const doneResult = await fetchDoneTodo(todo.id);
+    if (doneResult.errors) {
+      alert(doneResult.errors);
+    } else {
+      const fetchResult = await fetchTodoList();
+      reactReduxDispatcher({
+        type: 'todo-refresh',
+        payload: fetchResult.body,
+      });
+    }
   };
 
   const onDoneConfirmChangeHandler = () => {
     const checked = checkboxRef.current.checked;
-    let message = '';
-    if (checked) {
-      message = "모든 Item들을 '완료' 하시겠습니까?";
-    } else {
-      message = "모든 Item들을 '미완료' 하시겠습니까?";
-    }
+    let message = `"${todoTask}"을 "${checkboxRef.current.checked ? '완료' : '미완료'}" 하시겠습니까?`;
 
     confirmRef.current.showConfirm(message);
   };
 
   const onConfirmOkClickHandler = () => {
     onDoneChangeHandler();
-    onDoneChange(checkboxRef.current.checked);
   };
 
   const onConfirmCloseClickHandler = () => {

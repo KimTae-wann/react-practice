@@ -67,7 +67,7 @@ export const fetchAllDoneTodo = async () => {
   }
 };
 
-export const fetchAddTodo = async ({ todo, dueDate, priority }) => {
+export const fetchAddTodo = async (todo, dueDate, priority) => {
   try {
     const fetchResult = await fetch('http://localhost:8888/api/v1/task', {
       method: 'post',

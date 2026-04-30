@@ -7,16 +7,16 @@ import TodoHeader from './TodoHeader';
 import TodoList from './TodoList';
 import TodoAppender from './TodoAppender';
 import { StateTest } from './StateTest';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import TodoItem from './TodoItem';
 import TodoGrid from './TodoGrid';
 import AddCalculator from './AddCalculator';
 import {
   fetchAddTodo,
-  fetchAllDoneTodo,
   fetchDoneTodo,
   fetchTodoList,
 } from '../../http/todo/fetchTodo';
+import { useDispatch, useSelector } from 'react-redux';
 
 // function과 fat arrow function의 기능적 차이
 // function => 함수를 호출한 대상을 this 객체로 알 수 있다
@@ -32,13 +32,20 @@ const TodoMain = () => {
   // let ==> 변수 정의
   // TODO JSON DATA
 
-  const [cachedData, setCachedData] = useState([]);
+  // const [cachedData, setCachedData] = useState([]);
+
+  // ReactRedux Store에서 todo state를 가져옴
+  const todoList = useSelector((store) => store.todo);
+  const storeDispatcher = useDispatch(); // store의 state를 변경
 
   // Eternal Loop
   const refreshTodoList = async () => {
-    const todoList = await fetchTodoList();
+    const fetchResult = await fetchTodoList();
 
-    setCachedData(todoList.body);
+    // setCachedData(todoList.body);
+
+    // Reducer(reactReduxReducer) 호출
+    storeDispatcher({ type: 'todo-refresh', payload: fetchResult.body });
 
     if (todoList.errors) {
       alert(todoList.errors);
@@ -49,70 +56,6 @@ const TodoMain = () => {
     refreshTodoList();
   }, []);
 
-  const todoCount = useMemo(() => {
-    return {
-      all: cachedData.length,
-      done: cachedData.filter((todo) => todo.done).length,
-      process: cachedData.filter((todo) => !todo.done).length,
-    };
-  }, [cachedData]);
-
-  const onAllDoneChangeHandler = useCallback(async () => {
-    const allDoneResult = await fetchAllDoneTodo();
-    if (!allDoneResult.errors) {
-      refreshTodoList();
-    } else {
-      alert(allDoneResult.errors);
-    }
-    // setCachedData((prevData) => {
-    //   // cachedData를 반복하면서 모든 isDone의 값을 변경한다.
-    //   const newData = prevData.map((todo) => ({ ...todo, done }));
-    //   // 변경된 결과를 반환한다.
-    //   return newData;
-    // });
-  }, []);
-
-  // 특정 todo의 isDone 값을 반전시키는 함수
-  // 이 함수를 TodoList에게 props로 전달
-  // TodoList는 TodoItem에게 함수를 props로 전달
-  const onDoneChangeHandler = async (todoId) => {
-    const doneResult = await fetchDoneTodo();
-    if (!doneResult.errors) {
-      refreshTodoList();
-    } else {
-      alert(doneResult.errors);
-    }
-
-    // setCachedData((prevData) =>
-    //   prevData.map((item) =>
-    //     item.id === todoId ? { ...item, done: !item.done } : item,
-    //   ),
-    // );
-
-    // console.log(todoId, []);
-  };
-
-  // 리렌더링 되지 않게 변경
-  const onSaveButtonClickHandler = useCallback(
-    // setCachedData((prevData) => [
-    //   ...prevData,
-    //   { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
-    // ]);
-    // setNewTodoData({ todo: '', dueDate: '', priority: 0 });
-
-    // fetch --> 서버에게 todo를 등록하게 한다.
-    async (todo, dueDate, priority) => {
-      console.log('저장합니다');
-      const addResult = fetchAddTodo(todo, dueDate, priority);
-      if (!addResult.errors) {
-        refreshTodoList();
-      } else {
-        alert(addResult.errors);
-      }
-    },
-    [],
-  );
-
   // 컴포넌트가 만들어줄 HTML Tag set를 반환.
   return (
     <div className="wrapper">
@@ -121,21 +64,14 @@ const TodoMain = () => {
       <header>React Todo</header>
       <TodoGrid>
         {/* <TodoHeader onAllDoneChange={onAllDoneChangeHandler} /> */}
-        <TodoHeader
-          count={todoCount}
-          onAllDoneChange={onAllDoneChangeHandler}
-        />
+        <TodoHeader />
         <TodoList>
-          {cachedData.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onDoneChange={onDoneChangeHandler}
-            />
+          {todoList.map((todo) => (
+            <TodoItem key={todo.id} todo={todo} />
           ))}
         </TodoList>
       </TodoGrid>
-      <TodoAppender onSaveButtonClick={onSaveButtonClickHandler} />
+      <TodoAppender />
     </div>
   );
 };
