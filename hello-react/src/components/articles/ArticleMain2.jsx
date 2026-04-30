@@ -89,8 +89,9 @@ const ArticleMain = () => {
     );
     if (addResult.error) {
       writerRef.current.setResponseError(addResult.error);
+    } else {
+      refreshArticleList();
     }
-    refreshArticleList();
   };
 
   return (
