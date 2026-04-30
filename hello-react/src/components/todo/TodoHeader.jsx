@@ -5,6 +5,7 @@ import { Confirm } from '../ui/TodoModals';
 import TodoContext from './contexts/TodoContext.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllDoneTodo, fetchTodoList } from '../../http/todo/fetchTodo.js';
+import { todoAction } from '../../stores/toolkit/slices/todoSlice.js';
 
 const TodoHeader = () => {
   console.log('TodoHeader');
@@ -15,7 +16,7 @@ const TodoHeader = () => {
   const { componentName } = useContext(TodoContext);
 
   // react-redux store -> todo 가져오기
-  const todoList = useSelector((store) => store.todo);
+  const todoList = useSelector((store) => store.todo.list);
   const count = {
     all: todoList.length,
     done: todoList.filter((todo) => todo.done).length,
@@ -49,7 +50,7 @@ const TodoHeader = () => {
     //              성공했을 경우, 변경된 상태 유지
     //               all done을 수행하는 중에 다른 사용자로 인해 데이터가 추가됐다면 불러올 필요.
     // store 에 있는 fetch를 바꾸고
-    reactReduxDispatcher({ type: 'todo-all-done' });
+    reactReduxDispatcher(todoAction.allDone());
 
     const allDoneResult = await fetchAllDoneTodo();
 
@@ -57,7 +58,7 @@ const TodoHeader = () => {
       alert(allDoneResult.errors);
     }
     const fetchResult = await fetchTodoList();
-    reactReduxDispatcher({ type: 'todo-refresh', payload: fetchResult.body });
+    reactReduxDispatcher(todoAction.refresh(fetchResult.body));
   };
   const onConfirmCloseClickHandler = () => {
     checkboxRef.current.checked = !checkboxRef.current.checked;

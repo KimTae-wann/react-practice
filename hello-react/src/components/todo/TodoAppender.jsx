@@ -2,8 +2,9 @@ import { memo, useRef, useState } from 'react';
 import { Alert } from '../ui/TodoModals';
 import { fetchAddTodo, fetchTodoList } from '../../http/todo/fetchTodo';
 import { useDispatch } from 'react-redux';
+import { todoAction } from '../../stores/toolkit/slices/todoSlice';
 
-const TodoAppender = memo(({ onSaveButtonClick }) => {
+const TodoAppender = memo(() => {
   console.log('TodoAppender');
 
   const [isFetching, setIsFetching] = useState(false);
@@ -50,13 +51,8 @@ const TodoAppender = memo(({ onSaveButtonClick }) => {
     setIsFetching(false);
 
     const fetchResult = await fetchTodoList();
-    reactReduxDispatcher({ type: 'todo-refresh', payload: fetchResult.body });
+    reactReduxDispatcher(todoAction.refresh(fetchResult.body));
 
-    onSaveButtonClick(
-      todoRef.current.value,
-      dateRef.current.value,
-      priorityRef.current.value,
-    );
     todoRef.current.value = '';
     dateRef.current.value = '';
     priorityRef.current.value = '';

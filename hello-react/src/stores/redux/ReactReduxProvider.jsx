@@ -12,6 +12,8 @@ import { createStore } from 'redux';
 const reactReduxReducer = (
   store = {
     todo: [],
+    article: [],
+    token: null,
   },
   action,
 ) => {
