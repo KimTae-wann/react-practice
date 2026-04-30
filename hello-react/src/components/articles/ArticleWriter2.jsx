@@ -1,12 +1,14 @@
 /** @format */
-import { useRef, useState } from 'react';
+import { useImperativeHandle, useRef, useState } from 'react';
 import { Alert } from '../ui/Modals';
+import { isString } from '../../utils/type';
+import { getValidationResult } from '../../utils/errorHandler';
 
-const Input = ({ id, title, type = 'text', value, ref, onChange }) => {
+const Input = ({ id, title, type = 'text', value, ref, ...props }) => {
   return (
     <div className="input-field">
       <label htmlFor={id}>{title}</label>
-      <input type={type} id={id} value={value} ref={ref} onChange={onChange} />
+      <input type={type} id={id} value={value} ref={ref} {...props} />
     </div>
   );
 };
@@ -20,13 +22,27 @@ const Textarea = ({ id, title, value, ref, onChange }) => {
   );
 };
 
-const ArticleWriter2 = ({ onSaveButtonClick }) => {
+const ArticleWriter2 = ({ errorHandleRef, onSaveButtonClick }) => {
   const subjectRef = useRef();
-  const nameRef = useRef();
-  const emailRef = useRef();
   const contentRef = useRef();
+  const attachFileRef = useRef();
 
   const alertRef = useRef();
+
+  const [addError, setAddError] = useState();
+
+  // 글쓰기 중 에러가 발생했을 때 처리
+  useImperativeHandle(errorHandleRef, () => {
+    return {
+      setResponseError(fetchError) {
+        if (isString(fetchError)) {
+          setAddError(fetchError);
+        } else {
+          setAddError(getValidationResult(fetchError));
+        }
+      },
+    };
+  });
 
   const [viewMode, setViewMode] = useState('button');
 
@@ -38,14 +54,7 @@ const ArticleWriter2 = ({ onSaveButtonClick }) => {
       alertRef.current.showModal('제목을 입력해주세요.');
       return;
     }
-    if (!nameRef.current.value) {
-      alertRef.current.showModal('이름을 입력해주세요.');
-      return;
-    }
-    if (!emailRef.current.value) {
-      alertRef.current.showModal('이메일을 입력해주세요.');
-      return;
-    }
+
     if (!contentRef.current.value) {
       alertRef.current.showModal('내용을 입력해주세요.');
       return;
@@ -53,20 +62,16 @@ const ArticleWriter2 = ({ onSaveButtonClick }) => {
 
     onSaveButtonClick(
       subjectRef.current.value,
-      nameRef.current.value,
-      emailRef.current.value,
       contentRef.current.value,
+      attachFileRef.current.files, // TODO: 문제 있어서 바꿔야 함
     );
     subjectRef.current.value = '';
-    nameRef.current.value = '';
-    emailRef.current.value = '';
     contentRef.current.value = '';
+    attachFileRef.current.value = '';
   };
 
   const onViewChangeButtonClickHandler = (viewName) => {
     setViewMode(viewName);
-    if (viewName === 'button') {
-    }
   };
 
   return (
@@ -91,21 +96,21 @@ const ArticleWriter2 = ({ onSaveButtonClick }) => {
       {viewMode === 'form' && (
         <>
           <Alert dialogRef={alertRef} />
+          {isString(addError) && <div>{addError}</div>}
           <Input id="subject" title="제목" ref={subjectRef} />
-          <Input id="name" title="이름" ref={nameRef} />
-          <Input id="email" title="이메일" ref={emailRef} />
           <Textarea id="content" title="내용" ref={contentRef} />
+          <Input
+            type="file"
+            id="file"
+            title="첨부파일"
+            ref={attachFileRef}
+            multiple
+          />
 
           <button
             type="button"
             className="positive-button"
-            onClick={onSaveButtonClickHandler.bind(
-              this,
-              subjectRef.current?.value,
-              nameRef.current?.value,
-              emailRef.current?.value,
-              contentRef.current?.value,
-            )}
+            onClick={onSaveButtonClickHandler}
           >
             저장
           </button>
