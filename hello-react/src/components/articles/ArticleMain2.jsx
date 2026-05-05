@@ -11,74 +11,55 @@ import {
 } from '../../http/article/fetchArticleList.js';
 import { isString } from '../../utils/type.js';
 import { getValidationResult } from '../../utils/errorHandler.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { articleAction } from '../../stores/toolkit/slices/articleSlice.js';
 
 const ArticleMain = () => {
-  const [viewPageNo, setViewPageNo] = useState(0);
+  const dispatch = useDispatch();
 
-  const onPagintationButtonClickHandler = (nextPageNo) => {
-    setViewPageNo(nextPageNo);
-  };
+  // Store 에서 필요한 상태만 셀렉트
+  const {
+    items: articles,
+    count,
+    pagination,
+    tokenInfo,
+    loginErrors,
+  } = useSelector((state) => state.articles);
+  const { pageNo = 0, pageCount = 0 } = pagination;
 
-  const [
-    {
-      count,
-      result: articles,
-      pagination: { pageNo = 0, pageCount = 0 },
-    },
-    setArticles,
-  ] = useState({
-    count: 0,
-    result: [],
-    pagination: {},
-  });
-  // console.log(count, result, pagination);
+  const idRef = useRef();
+  const passwordRef = useRef();
+  const writerRef = useRef();
 
-  const refreshArticleList = async () => {
+  const refreshArticleList = async (viewPageNo) => {
     const articleList = await fetchArticleList(viewPageNo);
-    const {
-      result: { count, result },
-      pagination,
-    } = articleList;
-
-    setArticles({ count, result, pagination });
-
     if (articleList.error) {
       alert(articleList.error);
+      return;
     }
+
+    dispatch(articleAction.refresh(articleList));
   };
 
   useEffect(() => {
-    refreshArticleList();
-  }, [viewPageNo]);
+    refreshArticleList(pageNo);
+  }, []);
 
-  const [loginErrors, setLoginErrors] = useState();
+  const onLoginButtonClickHandler = async () => {
+    const tokenResult = await fetchJsonWebToken(
+      idRef.current.value,
+      passwordRef.current.value,
+    );
 
-  const [tokenInfo, setTokenInfo] = useState();
-  const idRef = useRef();
-  const passwordRef = useRef();
-
-  const onLoginButtonClickHandler = () => {
-    const loginArticleMain = async () => {
-      const token = await fetchJsonWebToken(
-        idRef.current.value,
-        passwordRef.current.value,
-      );
-      const tokenResult = token;
-      setTokenInfo(tokenResult.token);
-
-      if (tokenResult.error) {
-        if (isString(tokenResult.error)) {
-          setLoginErrors(tokenResult.error);
-        } else {
-          setLoginErrors(getValidationResult(tokenResult.error));
-        }
-      }
-    };
-
-    loginArticleMain();
+    if (tokenResult.token) {
+      dispatch(articleAction.setToken(tokenResult.token));
+    } else {
+      const errorMessage = isString(tokenResult.error)
+        ? tokenResult.error
+        : getValidationResult(tokenResult.error);
+      dispatch(articleAction.setLoginErrors(errorMessage));
+    }
   };
-
-  const writerRef = useRef();
 
   const onSaveButtonClickHandler = async (subject, content, attachFile) => {
     const addResult = await fetchAddArticle(
@@ -90,7 +71,7 @@ const ArticleMain = () => {
     if (addResult.error) {
       writerRef.current.setResponseError(addResult.error);
     } else {
-      refreshArticleList();
+      refreshArticleList(pageNo);
     }
   };
 
@@ -119,18 +100,10 @@ const ArticleMain = () => {
       </table>
       <div>
         {pageNo > 0 && (
-          <button
-            onClick={onPagintationButtonClickHandler.bind(this, pageNo - 1)}
-          >
-            이전
-          </button>
+          <button onClick={() => refreshArticleList(pageNo - 1)}>이전</button>
         )}
         {pageNo === 0 && pageCount - 1 > pageNo && (
-          <button
-            onClick={onPagintationButtonClickHandler.bind(this, pageNo + 1)}
-          >
-            다음
-          </button>
+          <button onClick={() => refreshArticleList(pageNo + 1)}>다음</button>
         )}
       </div>
       <ArticleWriter2

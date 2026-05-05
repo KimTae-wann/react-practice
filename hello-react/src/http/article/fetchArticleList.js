@@ -1,7 +1,8 @@
 export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
   try {
     const articleResponse = await fetch(
-      `http://192.168.211.11:8081/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
+      // `http://192.168.211.11:8081/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
+      `http://192.168.227.1:8080/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
     );
 
     const articleList = await articleResponse.json();
@@ -19,7 +20,8 @@ export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
 export const fetchJsonWebToken = async (email, password) => {
   try {
     const tokenResponse = await fetch(
-      'http://192.168.211.11:8081/api/authorization',
+      // 'http://192.168.211.11:8081/api/authorization',
+      'http://192.168.227.1:8080/api/authorization',
       {
         method: 'post',
         headers: {
@@ -55,13 +57,17 @@ export const fetchAddArticle = async (jwt, subject, content, attachFile) => {
     }
     // formData.append('attachFile', attachFile);
 
-    const fetchResult = await fetch('http://192.168.211.11:8081/api/articles', {
-      method: 'post',
-      headers: {
-        Authorization: jwt,
+    const fetchResult = await fetch(
+      // 'http://192.168.211.11:8081/api/articles',
+      'http://192.168.227.1:8080/api/articles',
+      {
+        method: 'post',
+        headers: {
+          Authorization: jwt,
+        },
+        body: formData,
       },
-      body: formData,
-    });
+    );
     const addResult = await fetchResult.json();
     return addResult;
   } catch (e) {

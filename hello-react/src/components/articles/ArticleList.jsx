@@ -1,10 +1,13 @@
 /** @format */
 
-const ArticleList = ({ contents }) => {
+import { useSelector } from 'react-redux';
+
+const ArticleList = () => {
+  const articles = useSelector((state) => state.articles.items);
   return (
     <tbody>
-      {contents.map((article) => (
-        <tr>
+      {articles.map((article) => (
+        <tr key={article.id}>
           <td>{article.id}</td>
           <td>{article.subject}</td>
           <td>
