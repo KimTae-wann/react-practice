@@ -7,8 +7,6 @@ export const articleSlice = createSlice({
     items: [],
     count: 0,
     pagination: { pageNo: 0, pageCount: 0 },
-    tokenInfo: null,
-    loginErrors: null,
   },
   reducers: {
     // 1. 게시글 목록 갱신
@@ -20,17 +18,6 @@ export const articleSlice = createSlice({
       store.count = count;
       store.items = result;
       store.pagination = pagination;
-    },
-
-    // 2. 로그인 정보 업데이트
-    setToken(store, action) {
-      store.tokenInfo = action.payload;
-      store.loginErrors = null;
-    },
-
-    // 3. 로그인 에러 업데이트
-    setLoginErrors(store, action) {
-      store.loginErrors = action.payload;
     },
   },
 });

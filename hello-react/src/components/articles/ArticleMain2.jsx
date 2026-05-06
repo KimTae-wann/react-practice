@@ -13,6 +13,7 @@ import { isString } from '../../utils/type.js';
 import { getValidationResult } from '../../utils/errorHandler.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { articleAction } from '../../stores/toolkit/slices/articleSlice.js';
+import { userAction } from '../../stores/toolkit/slices/userSlice.js';
 
 const ArticleMain2 = () => {
   const dispatch = useDispatch();
@@ -22,10 +23,10 @@ const ArticleMain2 = () => {
     items: articles,
     count,
     pagination,
-    tokenInfo,
-    loginErrors,
   } = useSelector((state) => state.articles);
   const { pageNo = 0, pageCount = 0 } = pagination;
+
+  const { tokenInfo, loginErrors } = useSelector((state) => state.user);
 
   const idRef = useRef();
   const passwordRef = useRef();
@@ -52,12 +53,12 @@ const ArticleMain2 = () => {
     );
 
     if (tokenResult.token) {
-      dispatch(articleAction.setToken(tokenResult.token));
+      dispatch(userAction.setToken(tokenResult.token));
     } else {
       const errorMessage = isString(tokenResult.error)
         ? tokenResult.error
         : getValidationResult(tokenResult.error);
-      dispatch(articleAction.setLoginErrors(errorMessage));
+      dispatch(userAction.setLoginErrors(errorMessage));
     }
   };
 

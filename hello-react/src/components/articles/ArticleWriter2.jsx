@@ -30,7 +30,7 @@ const Textarea = ({ id, title, value, ref, onChange }) => {
 
 const ArticleWriter2 = ({ errorHandleRef }) => {
   const dispatch = useDispatch();
-  const tokenInfo = useSelector((state) => state.articles.tokenInfo);
+  const tokenInfo = useSelector((state) => state.user.tokenInfo);
   const pagination = useSelector((state) => state.articles.pagination);
 
   const subjectRef = useRef();
