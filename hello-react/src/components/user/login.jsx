@@ -2,10 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import { isString } from '../../utils/type';
-import { getValidationResult } from '../../utils/errorHandler';
 import { useDispatch, useSelector } from 'react-redux';
-import { userAction } from '../../stores/toolkit/slices/userSlice';
-import { fetchJsonWebToken, fetchMyInfo } from '../../http/article/fetchLogin';
+import { userAction, userThunks } from '../../stores/toolkit/slices/userSlice';
 
 const Login = () => {
   const emailRef = useRef();
@@ -19,29 +17,12 @@ const Login = () => {
       dispatch(userAction.autoLogin());
       return;
     }
-    const loadMyInfo = async () => {
-      // "/api/member/me" 엔드포인트 호출.
-      // token이 있을 때만 수정
-      const myInfo = await fetchMyInfo(tokenInfo);
-
-      if (myInfo.error) {
-        // token이 변조되었거나 만료기간이 도래한 경우
-        // slice store도 제거
-        if (myInfo.status === 401 || myInfo.code === 'EXPIRED_TOKEN') {
-          sessionStorage.removeItem('token');
-          dispatch(userAction.logout());
-        }
-      } else {
-        return dispatch(userAction.loadMyInfo(myInfo));
-      }
-    };
-    loadMyInfo();
+    dispatch(userThunks.loadMyInfo());
   }, [tokenInfo, dispatch]);
 
   if (tokenInfo) {
     const onLogoutButtonClickHandler = () => {
-      sessionStorage.removeItem('token');
-      dispatch(userAction.logout());
+      dispatch(userThunks.logout());
     };
     return (
       <div>
@@ -52,20 +33,9 @@ const Login = () => {
   }
 
   const onLoginButtonClickHandler = async () => {
-    const tokenResult = await fetchJsonWebToken(
-      emailRef.current.value,
-      passwordRef.current.value,
+    dispatch(
+      userThunks.setToken(emailRef.current.value, passwordRef.current.value),
     );
-
-    if (tokenResult.error) {
-      const errorMessage = isString(tokenResult.error)
-        ? tokenResult.error
-        : getValidationResult(tokenResult.error);
-      dispatch(userAction.setLoginErrors(errorMessage));
-    } else {
-      sessionStorage.setItem('token', tokenResult.token);
-      dispatch(userAction.setToken(tokenResult.token));
-    }
   };
 
   return (

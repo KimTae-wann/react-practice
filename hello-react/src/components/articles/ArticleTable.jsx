@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchArticleList } from '../../http/article/fetchArticleList';
-import { articleAction } from '../../stores/toolkit/slices/articleSlice';
+import { articleThunks } from '../../stores/toolkit/slices/articleSlice';
+import { useEffect } from 'react';
 
 const ArticleTable = ({ children }) => {
   const {
@@ -9,15 +9,13 @@ const ArticleTable = ({ children }) => {
 
   const dispatch = useDispatch();
 
-  const refreshArticleList = async (viewPageNo) => {
-    const articleList = await fetchArticleList(viewPageNo);
-    if (articleList.error) {
-      alert(articleList.error);
-      return;
-    }
-
-    dispatch(articleAction.refresh(articleList));
+  const refreshArticleList = (pageNo) => {
+    dispatch(articleThunks.refresh(pageNo));
   };
+
+  useEffect(() => {
+    refreshArticleList(pageNo);
+  }, []);
   return (
     <>
       <table>{children}</table>
