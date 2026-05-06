@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { articleAction } from '../../stores/toolkit/slices/articleSlice.js';
 import Login from '../user/login.jsx';
+import ArticleTable from './ArticleTable.jsx';
 
 const ArticleMain2 = () => {
   const dispatch = useDispatch();
@@ -52,18 +53,11 @@ const ArticleMain2 = () => {
     <div className="wrapper">
       <Login />
       <div>{count}개의 게시글이 검색되었습니다.</div>
-      <table>
+      <ArticleTable>
         <ArticleHeader />
         <ArticleList contents={articles} />
-      </table>
-      <div>
-        {pageNo > 0 && (
-          <button onClick={() => refreshArticleList(pageNo - 1)}>이전</button>
-        )}
-        {pageNo === 0 && pageCount - 1 > pageNo && (
-          <button onClick={() => refreshArticleList(pageNo + 1)}>다음</button>
-        )}
-      </div>
+      </ArticleTable>
+
       <ArticleWriter2
         errorHandleRef={writerRef}
         onSaveButtonClick={onSaveButtonClickHandler}
