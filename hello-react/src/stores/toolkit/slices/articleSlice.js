@@ -25,7 +25,7 @@ export const articleSlice = createSlice({
     // 2. 로그인 정보 업데이트
     setToken(store, action) {
       store.tokenInfo = action.payload;
-      store.loginErros = null;
+      store.loginErrors = null;
     },
 
     // 3. 로그인 에러 업데이트

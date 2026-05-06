@@ -1,6 +1,6 @@
 /** @format */
 // articles.json 파일 불러오기
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ArticleHeader from './ArticleHeader.jsx';
 import ArticleList from './ArticleList.jsx';
 import ArticleWriter2 from './ArticleWriter2.jsx';
@@ -14,7 +14,7 @@ import { getValidationResult } from '../../utils/errorHandler.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { articleAction } from '../../stores/toolkit/slices/articleSlice.js';
 
-const ArticleMain = () => {
+const ArticleMain2 = () => {
   const dispatch = useDispatch();
 
   // Store 에서 필요한 상태만 셀렉트
@@ -113,4 +113,4 @@ const ArticleMain = () => {
     </div>
   );
 };
-export default ArticleMain;
+export default ArticleMain2;
