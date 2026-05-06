@@ -13,7 +13,6 @@ const ArticleMain2 = () => {
 
   return (
     <div className="wrapper">
-      <Login />
       <div>{count}개의 게시글이 검색되었습니다.</div>
       <ArticleTable>
         <ArticleHeader />

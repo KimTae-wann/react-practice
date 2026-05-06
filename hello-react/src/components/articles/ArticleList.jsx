@@ -1,6 +1,7 @@
 /** @format */
 
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const ArticleList = () => {
   const articles = useSelector((state) => state.articles.items);
@@ -11,7 +12,7 @@ const ArticleList = () => {
           <td>{article.id}</td>
           <td>{article.subject}</td>
           <td>
-            {article.membersVO.name}({article.membersVO.email})
+            <Link to={`/article/${article.id}`}>{article.subject}</Link>
           </td>
           <td>{article.viewCnt}</td>
           <td>{article.crtDt}</td>

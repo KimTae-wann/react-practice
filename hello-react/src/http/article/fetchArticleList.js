@@ -1,3 +1,18 @@
+export const fetchArticleById = async (id) => {
+  try {
+    const fetchResult = await fetch(
+      `http://192.168.227.1:8080/api/articles/${id}`,
+    );
+
+    const articleResult = await fetchResult.json();
+    return articleResult;
+  } catch (e) {
+    return {
+      error: '서비스가 잠시 중단되었습니다. 잠시 후 다시 시도해주세요',
+    };
+  }
+};
+
 export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
   try {
     const articleResponse = await fetch(

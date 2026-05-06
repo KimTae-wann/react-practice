@@ -58,6 +58,9 @@ const ArticleWriter2 = () => {
         attachFileRef.current.files,
       ),
     );
+    subjectRef.current.value = '';
+    contentRef.current.value = '';
+    attachFileRef.current.files = '';
   };
 
   const onViewChangeButtonClickHandler = (viewName) => {
