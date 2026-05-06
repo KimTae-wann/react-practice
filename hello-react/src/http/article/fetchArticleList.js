@@ -17,33 +17,6 @@ export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
   }
 };
 
-export const fetchJsonWebToken = async (email, password) => {
-  try {
-    const tokenResponse = await fetch(
-      // 'http://192.168.211.11:8081/api/authorization',
-      'http://192.168.227.1:8080/api/authorization',
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      },
-    );
-
-    const tokenResult = await tokenResponse.json();
-    return tokenResult;
-  } catch (e) {
-    return {
-      token: {},
-      error: '인증해줘',
-    };
-  }
-};
-
 // 인증 정보 필요
 export const fetchAddArticle = async (jwt, subject, content, attachFile) => {
   try {

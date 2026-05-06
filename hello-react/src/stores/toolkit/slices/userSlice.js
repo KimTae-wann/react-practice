@@ -6,17 +6,36 @@ export const userSlice = createSlice({
   initialState: {
     tokenInfo: null,
     loginErrors: null,
+    info: null, // 사용자 정보
   },
   reducers: {
-    // 2. 로그인 정보 업데이트
+    // 로그인 정보 업데이트
     setToken(store, action) {
       store.tokenInfo = action.payload;
       store.loginErrors = null;
     },
 
-    // 3. 로그인 에러 업데이트
+    // 로그인 에러 업데이트
     setLoginErrors(store, action) {
       store.loginErrors = action.payload;
+    },
+
+    autoLogin(store) {
+      // sessionStorage 에 있는 token을 가져와서 userSlice에 등록한다.
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        store.tokenInfo = token;
+      }
+    },
+
+    logout(store) {
+      store.tokenInfo = null;
+      store.info = null;
+      store.loginErrors = null;
+    },
+
+    loadMyInfo(store, action) {
+      store.info = action.payload;
     },
   },
 });
