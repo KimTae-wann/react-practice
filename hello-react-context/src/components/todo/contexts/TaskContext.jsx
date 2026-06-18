@@ -1,7 +1,7 @@
 // CommonJS
 // const { createContext } = require('react');
 
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
 export const TodoContext = createContext({
   todos: [],
@@ -17,23 +17,23 @@ const TodoContextProvider = ({ children }) => {
 
   const todoDatas = [
     {
-      id: 'todo_1',
-      todo: 'React Component Master1',
-      dueDate: '2026-04-22',
+      id: "todo_1",
+      todo: "React Component Master1",
+      dueDate: "2026-04-22",
       priority: 1,
       isDone: true,
     },
     {
-      id: 'todo_2',
-      todo: 'React Component Master2',
-      dueDate: '2026-04-23',
+      id: "todo_2",
+      todo: "React Component Master2",
+      dueDate: "2026-04-23",
       priority: 2,
       isDone: false,
     },
     {
-      id: 'todo_3',
-      todo: 'React Component Master3',
-      dueDate: '2026-04-24',
+      id: "todo_3",
+      todo: "React Component Master3",
+      dueDate: "2026-04-24",
       priority: 3,
       isDone: false,
     },
@@ -81,9 +81,9 @@ const TodoContextProvider = ({ children }) => {
   // Context의 Provider 값을 공유받을 수 있는 컴포넌트는
   // Context.Provider의 자식 컴포넌트만 대상.
   return (
-    <TodoContext.Provider value={todoContextProps}>
+    <TaskContext.Provider value={todoContextProps}>
       {children}
-    </TodoContext.Provider>
+    </TaskContext.Provider>
   );
 };
 

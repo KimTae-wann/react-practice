@@ -34,11 +34,11 @@ const PracTodoMain = () => {
       ...prevData,
       { id: prevData.length + 1, todo, dueDate, priority, isDone: false },
     ]);
-    setNewTodoDate({ todo: '', dueDate: '', priority: 0 });
+    setNewTodoData({ todo: '', dueDate: '', priority: 0 });
   };
 
   const [cachedData, setCachedData] = useState(todoDatas);
-  const [{ todo, dueDate, priority }, setNewTodoDate] = useState({
+  const [{ todo, dueDate, priority }, setNewTodoData] = useState({
     todo: '',
     duedate: '',
     priority: 0,
@@ -58,16 +58,16 @@ const PracTodoMain = () => {
     );
   };
   const onTaskKeyUpHandler = (event) => {
-    setNewTodoDate((prevData) => ({ ...prevData, todo: event.target.value }));
+    setNewTodoData((prevData) => ({ ...prevData, todo: event.target.value }));
   };
   const onDateChangeHandler = (event) => {
-    setNewTodoDate((prevData) => ({
+    setNewTodoData((prevData) => ({
       ...prevData,
       dueDate: event.target.value,
     }));
   };
   const onPriorityChangeHandler = (event) => {
-    setNewTodoDate((prevData) => ({
+    setNewTodoData((prevData) => ({
       ...prevData,
       priority: parseInt(event.target.value),
     }));

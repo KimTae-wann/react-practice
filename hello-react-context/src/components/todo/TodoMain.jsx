@@ -18,6 +18,7 @@ import TodoContextProvider from './contexts/TaskContext';
 // export default const TodoMain = () => {};
 // export default 이후에 const 키워드가 나타날 수 없음.
 const TodoMain = () => {
+  console.log('TodoMain');
   // 컴포넌트가 만들어줄 HTML Tag set를 반환.
   return (
     <div className="wrapper">
