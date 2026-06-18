@@ -25,8 +25,13 @@ export const HM0423 = () => {
   // const [amountData, setAmountData] = useState();
   // const [calcData, setCalcData] = useState();
   const onTargetDataChange = (event) => {
+    // setNums((prevData) => {
+    //   const temp = { ...prevData, targetData: event.target.value };
+    //   return temp;
+    // });
+    let value = parseInt(event.target.value || 0);
     setNums((prevNums) => {
-      const newNums = { ...prevNums, targetData: parseInt(event.target.value) };
+      const newNums = { ...prevNums, targetData: value };
       return newNums;
     });
   };
@@ -34,8 +39,12 @@ export const HM0423 = () => {
   //   setTargetData(parseInt(event.target.value));
   // };
   const onAmountDataChange = (event) => {
+    let value = parseInt(event.target.value);
+    if (isNaN(value)) {
+      value = 0;
+    }
     setNums((prevNums) => {
-      const newNums = { ...prevNums, amountData: parseInt(event.target.value) };
+      const newNums = { ...prevNums, amountData: value };
       return newNums;
     });
   };
@@ -45,27 +54,21 @@ export const HM0423 = () => {
   // };
 
   const onCalcButtonClickHandler = (operator) => {
+    let calcData = 0;
     if (operator === '+') {
-      setNums((prevNums) => {
-        const newNums = { ...prevNums, calcData: targetData + amountData };
-        return newNums;
-      });
+      calcData = targetData + amountData;
     } else if (operator === '-') {
-      setNums((prevNums) => {
-        const newNums = { ...prevNums, calcData: targetData - amountData };
-        return newNums;
-      });
+      calcData = targetData - amountData;
     } else if (operator === '*') {
-      setNums((prevNums) => {
-        const newNums = { ...prevNums, calcData: targetData * amountData };
-        return newNums;
-      });
+      calcData = targetData * amountData;
     } else if (operator === '/') {
-      setNums((prevNums) => {
-        const newNums = { ...prevNums, calcData: targetData / amountData };
-        return newNums;
-      });
+      calcData = targetData / amountData;
     }
+    setNums((prevNums) => {
+      const newNums = { ...prevNums, calcData: calcData };
+      // const newNums = { ...prevNums, calcData };
+      return newNums;
+    });
   };
 
   return (
